@@ -1,26 +1,25 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, { Component } from 'react';
 import './App.css';
+import { Switch, Route} from 'react-router-dom'
+import PrivateRoute from './router/PrivateRoute'
+import loadable from '@util/loadable'
+import 'antd/dist/antd.css'
+const Login = loadable(() => import('@pages/login'))
+const Index = loadable(() => import('@pages/Index'))
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+class App extends Component {
+  render () {
+    return (
+      <div className="App">
+        <Switch>
+        <Route path='/Login' component={Login}></Route>
+        <PrivateRoute path='/' component={Index}></PrivateRoute>
+         </Switch>
+      </div>
+    );
+  }
+  
 }
 
 export default App;
+
