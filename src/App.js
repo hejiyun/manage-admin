@@ -5,7 +5,7 @@ import PrivateRoute from './router/PrivateRoute'
 import loadable from '@util/loadable'
 import 'antd/dist/antd.css'
 const Login = loadable(() => import('@pages/login'))
-const Index = loadable(() => import('@pages/Index'))
+const Index = loadable(() => import('@pages/Index/index.jsx'))
 
 class App extends Component {
   render () {

@@ -32,8 +32,10 @@ module.exports = override(
   }),
   // 添加主题色
   addLessLoader({
-    javascriptEnabled: true,
-    modifyVars: { '@primary-color': '#1DA57A' },
+    lessOptions: {
+      javascriptEnabled: true,
+      modifyVars: { '@primary-color': '#1DA57A' },
+    }
   }),
   // 插件以cdn的方式引入
   addWebpackExternals({ //不做打包处理配置，如直接以cdn引入的
