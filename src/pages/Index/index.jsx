@@ -16,8 +16,7 @@ const { Header, Sider, Content } = Layout;
 class Index extends Component {
     state = {
         collapsed: false,
-        isShow: false,
-        isHide: false
+        isShow: false
       };
     
       toggle = () => {
@@ -53,28 +52,23 @@ class Index extends Component {
             <Sider breakpoint="lg"
               collapsedWidth="0"
               width={180}
-              onBreakpoint={broken => {
-                this.setState({
-                  isHide: broken
-                });
-              }}
               zeroWidthTriggerStyle={{ top:'42px', opacity:0.4, }}
               collapsed={this.state.collapsed} onCollapse={this.toggle}
              >
               <div className="logo">宝唯管理平台</div>
               <Menu style={{ width: '100%'}}  theme="dark" mode="inline" defaultSelectedKeys={['1']}>
                 <Menu.Item key="1" icon={<UserOutlined />}>
-                <Link to = '/Detail' onClick={this.state.isHide ? this.toggle : ''}>
+                <Link to = '/Detail'>
                           <span>跳转</span>
                         </Link>
                 </Menu.Item>
                 <Menu.Item key="2" icon={<VideoCameraOutlined />}>
-                <Link to = '/Collecte'  onClick={this.state.isHide ? this.toggle : ''}>
+                <Link to = '/Collecte'>
                           <span>跳转</span>
                         </Link>
                 </Menu.Item>
                 <Menu.Item key="3" icon={<UploadOutlined />}>
-                <Link to = '/home'  onClick={this.state.isHide ? this.toggle : ''}>
+                <Link to = '/home'>
                           <span>跳转</span>
                         </Link>
                 </Menu.Item>

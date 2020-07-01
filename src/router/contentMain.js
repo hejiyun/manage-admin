@@ -13,9 +13,9 @@ class ContentMain extends React.Component {
         {/* 路由从上到下依次匹配, 如果将404放在前面,则404后的路由都不会响应 */}
         <Switch>
           {
-            routers.map(route => {
+            routers.map((route,index) => {
               return (
-                <PrivateRoute exact path={route.path} component={route.component}/>
+                <PrivateRoute exact key={ index } path={route.path} component={route.component}/>
               )
             })
           }
