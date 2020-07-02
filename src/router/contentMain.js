@@ -12,15 +12,21 @@ class ContentMain extends React.Component {
       <div style={{ position: 'relative'}}>
         {/* 路由从上到下依次匹配, 如果将404放在前面,则404后的路由都不会响应 */}
         <Switch>
+        <Redirect exact from='/' to='/Home'/>
           {
+            
             routers.map((route,index) => {
-              return (
-                <PrivateRoute exact key={ index } path={route.path} component={route.component}/>
-              )
+             if(route.path === '/Login') {
+              return null
+             } else {
+              return route.path === '/NotFound' ? <PrivateRoute key={ index } component={NotFound404}></PrivateRoute> :
+              <PrivateRoute exact key={ index } path={route.path} component={route.component}/>
+                
+             }
             })
           }
-          <Redirect exact from='/' to='/Home'/>
-          <PrivateRoute component={NotFound404}></PrivateRoute>
+          
+          
         </Switch>
       </div>
     )
