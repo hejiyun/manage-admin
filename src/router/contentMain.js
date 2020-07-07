@@ -25,8 +25,6 @@ class ContentMain extends React.Component {
              }
             })
           }
-          
-          
         </Switch>
       </div>
     )
