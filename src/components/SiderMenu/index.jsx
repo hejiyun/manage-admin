@@ -15,7 +15,35 @@ class SiderMenu extends Component {
       selectedKeys: [e.key]
     });
   };
-
+  // 根据路径,设置对应的openkey
+  changeOpenKey(pathname) {
+    // 此排序规则需要router路径path按层级依次递进
+    const arr = pathname.split('/')
+    switch (arr.length) {
+      // 如果当前地址截取长度为2,那么证明是只有一个/,即是主菜单的其中一个,此时直接填入高亮
+      case 2 :
+        this.setState({
+          openKeys: [pathname]
+        })
+        break;
+      // 如果当前地址截取的长度为3,那么证明是子菜单的一个,此时,填入的应该是主菜单的高亮部分
+      case 3 :
+        this.setState({
+          openKeys: [`/${arr[1]}`]
+        })
+        break;
+      case 4:
+        this.setState({
+          openKeys: [`/${arr[1]}`, `/${arr[1]}/${arr[2]}`]
+        })
+        break;
+      // 就当前项目而言,结构较简单, 如果层级复杂, 可以继续判断长度.
+      default :
+        this.setState({
+          openKeys: [`/${arr[1]}`]
+        })
+    }
+  }
   // 初始化不执行, 在component接收新的状态(props)时被触发, 一般用于父组件状态更新时子组件重新渲染
   componentWillReceiveProps(nextProps) {
     const pathname = nextProps.location.pathname
@@ -37,11 +65,11 @@ class SiderMenu extends Component {
         })
       }
     }
+    this.changeOpenKey(pathname)
   }
 
   // 当路径改变时, 获取菜单项信息, 并打开对应的菜单, 关闭其他菜单项
   onOpenChange = openKeys => {
-    console.log(openKeys)
     if (openKeys.length === 1) {
       // 如果只打开一级菜单, 那么就设置为当前菜单
       this.setState({
@@ -66,9 +94,16 @@ class SiderMenu extends Component {
       })
     } else if (openKeys.length === 3) {
       // 如果长度为3, 那么证明打开的是同一级下不同二级目录
-      this.setState({
-        openKeys: [openKeys[0], openKeys[2]]
-      })
+      // 因为路径是递进的, 所以, 当最后打开的不是当前菜单目录下的子目录时, 第三项必然不包含第一项, 那么表明打开其他菜单
+      if (openKeys[2].indexOf(openKeys[0]) > -1) {
+        this.setState({
+          openKeys: [openKeys[0], openKeys[2]]
+        })
+      } else {
+        this.setState({
+          openKeys: [openKeys[2]]
+        })
+      }
     }
   };
   componentDidMount() {
@@ -77,82 +112,15 @@ class SiderMenu extends Component {
     this.setState({
       selectedKeys: [pathName]
     })
-    // 此排序规则需要router路径path按层级依次递进
-    const arr = pathName.split('/')
-    switch (arr.length) {
-      // 如果当前地址截取长度为2,那么证明是只有一个/,即是主菜单的其中一个,此时直接填入高亮
-      case 2 :
-        this.setState({
-          openKeys: [pathName]
-        })
-        break;
-      // 如果当前地址截取的长度为3,那么证明是子菜单的一个,此时,填入的应该是主菜单的高亮部分
-      case 3 :
-        this.setState({
-          openKeys: [`/${arr[1]}`]
-        })
-        break;
-      case 4:
-        this.setState({
-          openKeys: [`/${arr[1]}`, `/${arr[1]}/${arr[2]}`]
-        })
-        break;
-      // 就当前项目而言,结构较简单, 如果层级复杂, 可以继续判断长度.
-      default :
-        this.setState({
-          openKeys: [`/${arr[1]}`]
-        })
-    }
+    this.changeOpenKey(pathName)
   }
-
   render () {
     const { selectedKeys, openKeys } = this.state
     const MenuList = [
       {
-        path: '/user',
-        name: 'User',
-        meta: {
-          title: '权限管理', icon: 'user', roles: ['AuthorizationManage']
-        },
-        children: [
-          {
-            path: '/internal/list',
-            name: 'InternalUser',
-            meta: { title: '用户管理-内部' }
-          },
-          {
-            path: '/external/list',
-            name: 'ExternalUser',
-            meta: { title: 'externalUser' },
-            hidden: true
-          },
-          {
-            path: '/role/internal/newList',
-            id:('@/views/role/internal/newList'),
-            name: 'NewList',
-            meta: { title: '角色管理-权限设置' }
-          },
-          {
-            path: '/role/internal/newResourceList',
-            id:('@/views/role/internal/newResourceList'),
-            name: 'NewResourceList',
-            meta: { title: '新增资源' }
-          },
-          {
-            path: '/external/changepassword',
-            id:('@/views/user/external/changePassword'),
-            name: 'ChangePassword',
-            meta: { title: 'changePassword', noCache: true },
-            hidden: true
-          },
-          {
-            path: '/role/internal/list',
-            id:('@/views/role/internal/list'),
-            name: 'internalRoleList',
-            meta: { title: 'internalRoleList' },
-            hidden: true
-          }
-        ]
+        path: '/Home',
+        redirect: '/TradingPlatform/orderList',
+        name: '主页',
       },
       {
         path: '/TradingPlatform',

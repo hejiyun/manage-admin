@@ -4,6 +4,7 @@ import { Layout, Popover } from 'antd';
 import { Link } from 'react-router-dom'
 import { DownOutlined } from '@ant-design/icons';
 import SiderMenu from '@components/SiderMenu'
+import Tags from '@components/Tags'
 import './Index.less'
 
 const { Header, Sider, Content } = Layout;
@@ -32,7 +33,7 @@ class Index extends Component {
         const content = (
           <div>
             <p>
-            <Link to = '/home' onClick={this.handleVisibleChange}>
+            <Link to = '/Home' onClick={this.handleVisibleChange}>
               <span>首页</span>
             </Link>
             </p>
@@ -57,12 +58,12 @@ class Index extends Component {
             <Layout className="site-layout">
               <Header className="site-layout-background" style={{ padding: '0 68px 0 0 ', height: '42px', lineHeight: '42px', position: 'relative', borderBottom: '1px solid #ccc' }}>
                 {this.state.isShow ? <div className="logo1">宝唯管理平台</div> : ''}
-                左边是tags,  右边是用户登录-tags部分
+                <Tags/>
                 <Popover visible={this.state.visible} placement="bottom" onVisibleChange={this.handleVisibleChange} content={content} trigger="click">
                 <div className="header-right" onClick={this.showTop}>
                 张岩<DownOutlined />
                 </div>
-                </Popover> 
+                </Popover>
               </Header>
               <Content
                 className="site-layout-background"
