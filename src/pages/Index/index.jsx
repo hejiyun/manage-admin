@@ -6,16 +6,39 @@ import { DownOutlined } from '@ant-design/icons';
 import SiderMenu from '@components/SiderMenu'
 import Tags from '@components/Tags'
 import './Index.less'
-
+import store from '../../store'
+import { Spin } from 'antd'
+import {getPass, getPass1} from '@axios/Test'
 const { Header, Sider, Content } = Layout;
 
 // 这里几个页面级组件的结构都一样,改类名就行
 class Index extends Component {
     state = {
         collapsed: false,
-        isShow: false
+        isShow: false,
+        loading: false
       };
-    
+      componentDidMount () {
+        // 重点
+        // 重点
+        // 重点
+        // 监听store中pageLoadingVal值
+        store.subscribe(() => {
+          let storeState = store.getState()
+          this.setState({
+            loading: storeState.pageLoadingVal
+          })
+        })
+      }
+      getPass = async () => {
+        try {
+          const res = await getPass({id:'123'})
+          console.log(res.data, 'zheli')
+        } catch (e) {
+          console.log(e, 'zheli')
+        }
+          getPass1({id: '123ewq'})
+      }
       toggle = () => {
         this.setState({
           isShow: !this.state.isShow,
@@ -30,6 +53,7 @@ class Index extends Component {
         });
       }
       render() {
+        let { loading } = this.state
         const content = (
           <div>
             <p>
@@ -45,6 +69,7 @@ class Index extends Component {
           </div>
         );
         return (
+          <Spin spinning={loading} wrapperClassName="page-loading">
           <Layout className="layout-box-class">
             <Sider breakpoint="lg"
               collapsedWidth="0"
@@ -56,6 +81,7 @@ class Index extends Component {
               <SiderMenu/>
             </Sider>
             <Layout className="site-layout">
+              <span onClick={this.getPass}>dinaji</span>
               <Header className="site-layout-background" style={{ padding: '0 68px 0 0 ', height: '42px', lineHeight: '42px', position: 'relative', borderBottom: '1px solid #ccc' }}>
                 {this.state.isShow ? <div className="logo1">宝唯管理平台</div> : ''}
                 <Tags/>
@@ -77,6 +103,7 @@ class Index extends Component {
               </Content>
             </Layout>
           </Layout>
+          </Spin>
         );
       }
 }

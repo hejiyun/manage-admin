@@ -28,7 +28,8 @@ module.exports = override(
     '@components': path.resolve(__dirname, 'src/components'),
     '@pages': path.resolve(__dirname, 'src/pages'),
     '@util': path.resolve(__dirname, 'src/util'),
-    '@router': path.resolve(__dirname, 'src/router')
+    '@router': path.resolve(__dirname, 'src/router'),
+    '@axios': path.resolve(__dirname, 'src/axios')
   }),
   // 添加主题色
   addLessLoader({
