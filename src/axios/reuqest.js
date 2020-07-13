@@ -32,7 +32,6 @@ instance.interceptors.request.use(
       // showLoading.loading()
       // 让每个请求携带token-- ['X-Token']为自定义key 请根据实际情况自行修改
       // config.headers['Authorization'] = getToken()
-      console.log('dfahjf')
       return config;
     },
     error => {
@@ -52,7 +51,6 @@ instance.interceptors.response.use(
   }, 
   error => {
     tryHideFullScreenLoading()
-    console.log('dfahjf+qwejqe')
     // 失败,在拿到请求后, 去除loading状态
     // 400错误,正常返回错误信息
     // 500 错误. 正常返回错误信息

@@ -68,6 +68,22 @@ class SiderMenu extends Component {
     this.changeOpenKey(pathname)
   }
 
+  // 判断处理是否需要重新加载, 只有当打开的菜单栏和选中的菜单相同时， 才不需要更新
+  shouldComponentUpdate(nextProps, nextState) {
+    const len = nextState.openKeys.length
+    if (len === 1) {
+      if ((nextState.openKeys[0] === this.state.openKeys[0]) && nextState.selectedKeys[0] === this.state.selectedKeys[0]) {
+        return false
+      }
+      return true
+    } else {
+      if ((nextState.openKeys[1] === this.state.openKeys[1]) && nextState.selectedKeys[0] === this.state.selectedKeys[0]) {
+        return false
+      }
+      return true
+    }
+  }
+
   // 当路径改变时, 获取菜单项信息, 并打开对应的菜单, 关闭其他菜单项
   onOpenChange = openKeys => {
     if (openKeys.length === 1) {

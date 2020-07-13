@@ -415,6 +415,16 @@ class HotTags extends Component {
       selectedTags: [item[0].path]
     })
   }
+
+  // 判断当前组件是否需要更新
+  shouldComponentUpdate(nextProps, nextState) {
+    if ((nextState.tagsData.length === this.state.tagsData.length) && nextState.selectedTags[0] === this.state.selectedTags[0]) {
+      return false
+    }
+    return true
+  }
+
+
   // 
   componentWillMount() {
     const arr = []
