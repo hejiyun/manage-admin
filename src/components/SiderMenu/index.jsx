@@ -72,11 +72,13 @@ class SiderMenu extends Component {
   shouldComponentUpdate(nextProps, nextState) {
     const len = nextState.openKeys.length
     if (len === 1) {
+      // 二级菜单时, 判断第一项相同且选中相同
       if ((nextState.openKeys[0] === this.state.openKeys[0]) && nextState.selectedKeys[0] === this.state.selectedKeys[0]) {
         return false
       }
       return true
     } else {
+      // 三级菜单时, 判断第二项相同且选中相同
       if ((nextState.openKeys[1] === this.state.openKeys[1]) && nextState.selectedKeys[0] === this.state.selectedKeys[0]) {
         return false
       }

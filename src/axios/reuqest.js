@@ -1,6 +1,6 @@
 import axios from 'axios';
 import store from '../store'
-import { OPENPAGELOADING, CLOSEPAGELOADING } from '../store/actions'
+import { OPENPAGELOADING, CLOSEPAGELOADING } from '../store/tagsView/actions'
 // 创建axios对象
 const instance = axios.create({
   baseURL: process.env.BASE_API, // api 的 base_url
@@ -37,7 +37,7 @@ instance.interceptors.request.use(
     error => {
       tryHideFullScreenLoading()
       //请求错误时做些事
-      return Promise.reject(error);
+      return Promise.reject(error.response);
     }
 );
 
@@ -47,7 +47,7 @@ instance.interceptors.response.use(
     //在拿到请求后, 去除loading状态
     tryHideFullScreenLoading()
     // 1.成功
-    return Promise.reject(response);
+    return Promise.resolve(response);
   }, 
   error => {
     tryHideFullScreenLoading()

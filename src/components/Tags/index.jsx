@@ -418,6 +418,7 @@ class HotTags extends Component {
 
   // 判断当前组件是否需要更新
   shouldComponentUpdate(nextProps, nextState) {
+    // 只有当标签总数和选中标签同时不变时, 才不需要重新渲染
     if ((nextState.tagsData.length === this.state.tagsData.length) && nextState.selectedTags[0] === this.state.selectedTags[0]) {
       return false
     }
