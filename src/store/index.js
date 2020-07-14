@@ -1,12 +1,17 @@
 // store/index.js
-import { createStore, applyMiddleware, combineReducers } from 'redux'
-import AppReducer from './tagsView/reducers'
-// 使用中间件, 可以执行store.dispatch的异步操作
-import thunk from 'redux-thunk'
+import { createStore } from 'redux'
+import reducers from './rootReducer'
+import {persistStore, persistReducer} from 'redux-persist';
+import storage from 'redux-persist/lib/storage';
 
 
-let store =  createStore (
-  combineReducers({AppReducer}),
-  applyMiddleware(thunk)
-)
+const persistConfig = {
+  key: 'root',
+  storage: storage
+};
+const myPersistReducer = persistReducer(persistConfig, reducers)
+
+const store = createStore(myPersistReducer)
+
+export const persistor = persistStore(store)
 export default store

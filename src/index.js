@@ -7,12 +7,16 @@ import {Provider} from "react-redux";
 import {BrowserRouter} from 'react-router-dom'
 import * as serviceWorker from './serviceWorker';
 import { BrowserRouter as Router} from 'react-router-dom'
+import {persistor} from '@store'
+import {PersistGate} from 'redux-persist/lib/integration/react';
 
 ReactDOM.render(
     <BrowserRouter >
      <Router>
      <Provider store={store}>
-     <App />
+     <PersistGate persistor={persistor}>
+      <App/>
+     </PersistGate>
       </Provider>
     </Router>
     </BrowserRouter>

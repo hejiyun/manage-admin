@@ -11,6 +11,7 @@ const instance = axios.create({
 let needLoadingRequestCount = 0
 
 const loginMsg = JSON.parse(sessionStorage.getItem('userInfo'))
+const loginMsg2 = store.getstate()
 
 function showFullScreenLoading () {
   if (needLoadingRequestCount === 0) {
@@ -31,6 +32,7 @@ function tryHideFullScreenLoading () {
 instance.interceptors.request.use(
   config => {
       //在发送请求之前做某事，比如加一个loading
+      console.log(loginMsg2)
       showFullScreenLoading()
       if (getToken()) {
         config.headers['Authorization'] = getToken()

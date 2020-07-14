@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import { Form, Input, Button, Checkbox } from 'antd';
 import {loginIn} from '@axios/Test'
 import { setToken, setUserInfo } from '@util/auth'
-
+import { connect } from 'react-redux';
+import { setAToken, setRToken, setUserName, setUserCode } from '@store/loginMsg/actions'
 
 const layout = {
     labelCol: { span: 8 },
@@ -32,6 +33,7 @@ class login extends Component {
       params['systemId'] = 10
       try {
         const res = await loginIn(values)
+        console.log(res)
         const Token = res.data.data.accessToken
         const RToken = res.data.data.refreshToken
         const userName = res.data.data.userName
@@ -44,7 +46,11 @@ class login extends Component {
         }
         setUserInfo(userInfo)
         setToken(Token)
-        this.props.history.push('/Home')
+        setAToken(Token)
+        setRToken(RToken)
+        setUserName(userName)
+        setUserCode(userCode)
+        // this.props.history.push('/Home')
       } catch(e) {
         console.log('登录失e败', e)
       } 
@@ -96,5 +102,9 @@ class login extends Component {
     }
 }
 
-export default login
+export default connect (state => (
+  { loginInsert: state.loginInsert }
+), {
+  setAToken, setRToken, setUserName, setUserCode
+})(login)
 
