@@ -10,9 +10,6 @@ const instance = axios.create({
 /* 添加一个计数器 */
 let needLoadingRequestCount = 0
 
-const loginMsg = JSON.parse(sessionStorage.getItem('userInfo'))
-const loginMsg2 = store.getstate()
-
 function showFullScreenLoading () {
   if (needLoadingRequestCount === 0) {
     store.dispatch({type: OPENPAGELOADING})
@@ -32,7 +29,6 @@ function tryHideFullScreenLoading () {
 instance.interceptors.request.use(
   config => {
       //在发送请求之前做某事，比如加一个loading
-      console.log(loginMsg2)
       showFullScreenLoading()
       if (getToken()) {
         config.headers['Authorization'] = getToken()
@@ -63,8 +59,9 @@ instance.interceptors.response.use(
     if (error.response.data.errorCode === '4010') {
       // 先判断是不是跳转到登录页
       if (window.location.pathname !== 'login') {
+        const loginMm = store.getState()
         // 如果有RTOKEN的话, 就执行aTOKEN续命的动作
-        if (loginMsg.RToken) {
+        if (loginMm.LoginInsert.RToken) {
           try {
             const data = await axios({
               method: 'post',
@@ -73,7 +70,7 @@ instance.interceptors.response.use(
                 systemId: 10,
                 userCode: 'jiafu.wang'
               },
-              headers: { Authorization: loginMsg.RToken }
+              headers: { Authorization: loginMm.LoginInsert.RToken }
             })
             const token = data.data.data
             setToken(token)

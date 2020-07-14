@@ -2,12 +2,13 @@
 import { createStore } from 'redux'
 import reducers from './rootReducer'
 import {persistStore, persistReducer} from 'redux-persist';
-import storage from 'redux-persist/lib/storage';
+import storageSession from 'redux-persist/lib/storage/session'
 
 
 const persistConfig = {
   key: 'root',
-  storage: storage
+  storage: storageSession,
+  blacklist: ['auth', 'notes']
 };
 const myPersistReducer = persistReducer(persistConfig, reducers)
 

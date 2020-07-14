@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Form, Input, Button, Checkbox } from 'antd';
 import {loginIn} from '@axios/Test'
-import { setToken, setUserInfo } from '@util/auth'
+import { setToken } from '@util/auth'
 import { connect } from 'react-redux';
 import { setAToken, setRToken, setUserName, setUserCode } from '@store/loginMsg/actions'
 
@@ -38,19 +38,12 @@ class login extends Component {
         const RToken = res.data.data.refreshToken
         const userName = res.data.data.userName
         const userCode = res.data.data.userCode
-        const userInfo = {
-          Token: Token,
-          RToken:RToken,
-          userName: userName,
-          userCode: userCode
-        }
-        setUserInfo(userInfo)
         setToken(Token)
-        setAToken(Token)
-        setRToken(RToken)
-        setUserName(userName)
-        setUserCode(userCode)
-        // this.props.history.push('/Home')
+        this.props.setAToken(Token)
+        this.props.setRToken(RToken)
+        this.props.setUserName(userName)
+        this.props.setUserCode(userCode)
+        this.props.history.push('/Home')
       } catch(e) {
         console.log('登录失e败', e)
       } 
