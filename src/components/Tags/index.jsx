@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Tag } from 'antd';
 import { Link, withRouter } from 'react-router-dom'
 import { connect } from 'react-redux';
-import { setTagsData } from '@store/tagsView/actions'
+import { setTagsData, setMenuList } from '@store/tagsView/actions'
 
 const { CheckableTag } = Tag;
 // 从redux中获取数据
@@ -389,6 +389,12 @@ const MenuList = [
         id:('@/views/errorPage/404'),
         name: 'Page404',
         meta: { title: 'page404', noCache: true }
+      },
+      {
+        path: '/NotFound',
+        id:('@/views/errorPage/404'),
+        name: 'NotFound',
+        meta: { title: 'page404', noCache: true }
       }
     ]
   }
@@ -411,10 +417,24 @@ class HotTags extends Component {
     // 没有的话, 就添加一个404的tags标签, 因为路径出错的话, router是已经设置了跳转到404页面的.
     // 有的话, 证明跳转的是现有的路径, 那么就判断当前tag是否已存在, 存在则跳转, 不存在则添加新标签并跳转
     const item = tagsList.filter(item => item.path === nextProps.location.pathname)
+    let TargeArr
+    if (item) {
+      // 判断item 是否在tagsData中
+      const hasTags = tagsData.filter(item => item.path === nextProps.location.pathname).length
+      TargeArr = hasTags ? tagsData : [...tagsData, ...item]
+    } else {
+      // 判断tagsData中是否含有notFOund
+      const hasTags = tagsData.filter(item => item.path === '/NotFound').length
+      TargeArr = hasTags ? tagsData : [...tagsData, {
+        path: '/NotFound',
+        name: 'NotFound',
+      }]
+    }
     const hasTags = tagsData.filter(item => item.path === nextProps.location.pathname).length
+    console.log(hasTags)
     this.setState({
-      tagsData: hasTags ? tagsData : [...tagsData, ...item],
-      selectedTags: [item[0].path]
+      tagsData: TargeArr,
+      selectedTags: item[0] ? [item[0].path] : ['/NotFound']
     })
   }
 
@@ -430,14 +450,16 @@ class HotTags extends Component {
   }
   componentWillMount() {
     // 在创建之前, 获取tags列表, 观察刷新前是否已有tags
+    console.log(this.props)
     const TargsCurrent = this.props.TagsData.TagsData
     const arr = []
     MenuList.forEach(e => {
       this.getTarget(e, arr)
     })
+    this.props.setMenuList(arr)
     const {tagsData, selectedTags} = this.state
     const pathname = this.props.location.pathname
-    const item = arr.filter(item => item.path === pathname)
+    let item = arr.filter(item => item.path === pathname)
     // 在组件渲染完成前, 先判断, 是否是新增tags, 及存储内是否有tags
     let TargeArr
     if (item.length) {
@@ -456,8 +478,29 @@ class HotTags extends Component {
         TargeArr = item
       }
     } else {
-      // 如果都没有, 则为默认标签
-      TargeArr = tagsData
+      console.log(TargsCurrent, 'wer')
+      // 如果都没有, 则为404标签
+      if (TargsCurrent) {
+        const res = TargsCurrent.filter(e => e.path === '/NotFound').length
+        if (res) {
+          TargeArr = TargsCurrent
+        } else {
+          TargeArr = [...TargsCurrent,{
+            path: '/NotFound',
+            name: 'NotFound',
+          }]
+        }
+      } else {
+        TargeArr = [...tagsData, {
+          path: '/NotFound',
+          name: 'NotFound',
+        }]
+      }
+      console.log(TargeArr)
+      item = [ {
+        path: '/NotFound',
+        name: 'NotFound',
+      }]
     }
     this.setState({
       tagsList: arr,
@@ -513,8 +556,6 @@ class HotTags extends Component {
           }
         }
       }
-
-
     })
 
   }
@@ -549,5 +590,5 @@ class HotTags extends Component {
 export default connect (state => (
   { TagsData: state.TagsData }
 ), {
-  setTagsData
+  setTagsData, setMenuList
 })(withRouter(HotTags))
