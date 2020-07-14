@@ -29,7 +29,8 @@ module.exports = override(
     '@pages': path.resolve(__dirname, 'src/pages'),
     '@util': path.resolve(__dirname, 'src/util'),
     '@router': path.resolve(__dirname, 'src/router'),
-    '@axios': path.resolve(__dirname, 'src/axios')
+    '@axios': path.resolve(__dirname, 'src/axios'),
+    '@store': path.resolve(__dirname, 'src/store')
   }),
   // 添加主题色
   addLessLoader({
@@ -44,7 +45,6 @@ module.exports = override(
     // highcharts:"window.highcharts"
   }),
   (config) => { //暴露webpack的配置 config ,evn
-    console.log(config.module.rules.find(rule => Array.isArray(rule.oneOf)).oneOf, 'zheli')
     // 去掉打包生产map 文件
     // config.devtool = config.mode === 'development' ? 'cheap-module-source-map' : false;
     if(process.env.NODE_ENV==="production") config.devtool=false;

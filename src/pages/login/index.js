@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { Form, Input, Button, Checkbox } from 'antd';
 import {loginIn} from '@axios/Test'
+import { setToken, setUserInfo } from '@util/auth'
+
 
 const layout = {
     labelCol: { span: 8 },
@@ -9,20 +11,7 @@ const layout = {
   const tailLayout = {
     wrapperCol: { offset: 8, span: 16 },
   };
-
-    const onFinish = async (values) => {
-        const params = values
-        params['systemId'] = 10
-       const res = await loginIn(values)
-       const token = res.data.data.accessToken
-       const Rtoken = res.data.data.refreshToken
-       const name = res.data.data.userName
-       console.log(token, Rtoken, name)
-    };
   
-    const onFinishFailed = errorInfo => {
-      console.log('Failed:', errorInfo);
-    };
 
 
 // 这里几个页面级组件的结构都一样,改类名就行
@@ -30,9 +19,39 @@ class login extends Component {
     formRef = React.createRef();
 
     onReset = () => {  
+      console.log(this.props)
         this.formRef.current.resetFields();
     };
+
+    onFinishFailed = errorInfo => {
+      console.log('Failed:', errorInfo);
+    };
+
+    onFinish = async (values) => {
+      const params = values
+      params['systemId'] = 10
+      try {
+        const res = await loginIn(values)
+        const Token = res.data.data.accessToken
+        const RToken = res.data.data.refreshToken
+        const userName = res.data.data.userName
+        const userCode = res.data.data.userCode
+        const userInfo = {
+          Token: Token,
+          RToken:RToken,
+          userName: userName,
+          userCode: userCode
+        }
+        setUserInfo(userInfo)
+        setToken(Token)
+        this.props.history.push('/Home')
+      } catch(e) {
+        console.log('登录失e败', e)
+      } 
+   
+  };
     render () {
+      console.log(this.props)
         return (
             <div style={{width: '300px', margin: '200px auto'}}>
             <Form
@@ -40,8 +59,8 @@ class login extends Component {
             {...layout}
             name="basic"
             initialValues={{ remember: true }}
-            onFinish={onFinish}
-            onFinishFailed={onFinishFailed}
+            onFinish={this.onFinish}
+            onFinishFailed={this.onFinishFailed}
           >
             <Form.Item
               label="用户名"
@@ -78,3 +97,4 @@ class login extends Component {
 }
 
 export default login
+

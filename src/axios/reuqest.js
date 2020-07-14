@@ -1,6 +1,7 @@
 import axios from 'axios';
 import store from '../store'
 import { OPENPAGELOADING, CLOSEPAGELOADING } from '../store/tagsView/actions'
+import { getToken, setToken } from '@util/auth'
 // 创建axios对象
 const instance = axios.create({
   baseURL: process.env.BASE_API, // api 的 base_url
@@ -8,6 +9,8 @@ const instance = axios.create({
 })
 /* 添加一个计数器 */
 let needLoadingRequestCount = 0
+
+const loginMsg = JSON.parse(sessionStorage.getItem('userInfo'))
 
 function showFullScreenLoading () {
   if (needLoadingRequestCount === 0) {
@@ -29,6 +32,9 @@ instance.interceptors.request.use(
   config => {
       //在发送请求之前做某事，比如加一个loading
       showFullScreenLoading()
+      if (getToken()) {
+        config.headers['Authorization'] = getToken()
+      }
       // showLoading.loading()
       // 让每个请求携带token-- ['X-Token']为自定义key 请根据实际情况自行修改
       // config.headers['Authorization'] = getToken()
@@ -49,9 +55,41 @@ instance.interceptors.response.use(
     // 1.成功
     return Promise.resolve(response);
   }, 
-  error => {
+  async error => {
     tryHideFullScreenLoading()
     // 失败,在拿到请求后, 去除loading状态
+    if (error.response.data.errorCode === '4010') {
+      // 先判断是不是跳转到登录页
+      if (window.location.pathname !== 'login') {
+        // 如果有RTOKEN的话, 就执行aTOKEN续命的动作
+        if (loginMsg.RToken) {
+          try {
+            const data = await axios({
+              method: 'post',
+              url: '/api/api/v1/access_token',
+              data: {
+                systemId: 10,
+                userCode: 'jiafu.wang'
+              },
+              headers: { Authorization: loginMsg.RToken }
+            })
+            const token = data.data.data
+            setToken(token)
+            const config = error.response.config
+            config.headers.Authorization = token
+            const res = await axios.request(config)
+            return res
+          } catch (e) {
+            console.log(e)
+            setToken('')
+            window.location.href = '/login';
+          }
+        }
+      } else {
+        setToken('')
+        window.location.href = '/login';
+      }
+    }
     // 400错误,正常返回错误信息
     // 500 错误. 正常返回错误信息
     // 401token过期, 无权限, 则自动刷新token续命

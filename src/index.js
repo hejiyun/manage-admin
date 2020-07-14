@@ -6,16 +6,17 @@ import store from './store'
 import {Provider} from "react-redux";
 import {BrowserRouter} from 'react-router-dom'
 import * as serviceWorker from './serviceWorker';
-import { BrowserRouter as Router, Route } from 'react-router-dom'
+import { BrowserRouter as Router} from 'react-router-dom'
 
 ReactDOM.render(
-  <Provider store={store}>
     <BrowserRouter >
      <Router>
-        <Route component={App}></Route>
+     <Provider store={store}>
+     <App />
+      </Provider>
     </Router>
     </BrowserRouter>
-   </Provider>,
+   ,
   document.getElementById('root')
 );
 

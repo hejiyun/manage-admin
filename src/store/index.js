@@ -1,8 +1,12 @@
 // store/index.js
-import { createStore } from 'redux'
+import { createStore, applyMiddleware, combineReducers } from 'redux'
 import AppReducer from './tagsView/reducers'
-import LoginInsert from './loginMsg/reducers'
+// 使用中间件, 可以执行store.dispatch的异步操作
+import thunk from 'redux-thunk'
 
-const store = createStore(AppReducer, LoginInsert)
 
+let store =  createStore (
+  combineReducers({AppReducer}),
+  applyMiddleware(thunk)
+)
 export default store

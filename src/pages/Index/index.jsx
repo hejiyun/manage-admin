@@ -26,7 +26,7 @@ class Index extends Component {
         store.subscribe(() => {
           let storeState = store.getState()
           this.setState({
-            loading: storeState.pageLoadingVal
+            loading: storeState.AppReducer.pageLoadingVal
           })
         })
       }
