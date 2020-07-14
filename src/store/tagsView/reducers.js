@@ -1,17 +1,15 @@
-// reducers/index.js
+import * as tag from './action-type'
+
 const initState = {
-  pageLoadingVal: false
+  TagsData: []
 }
-const AppReducer = (state=initState, action) => {
+
+const TagsData = (state=initState, action) => {
   switch (action.type) {
-    case `OpenPageLoading`: {
+    case tag.SETTAGSDATA: {
+      state.TagsData = action.tagsData
       return {
-        pageLoadingVal: true
-      }
-    }
-    case `ClosePageLoading`: {
-      return {
-        pageLoadingVal: false
+        ...state
       }
     }
     default: {
@@ -20,4 +18,4 @@ const AppReducer = (state=initState, action) => {
   }
 }
 
-export default AppReducer
+export default TagsData

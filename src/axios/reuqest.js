@@ -1,6 +1,6 @@
 import axios from 'axios';
 import store from '../store'
-import { OPENPAGELOADING, CLOSEPAGELOADING } from '../store/tagsView/actions'
+import { OPENPAGELOADING, CLOSEPAGELOADING } from '../store/preventRepeat/actions'
 import { getToken, setToken } from '@util/auth'
 // 创建axios对象
 const instance = axios.create({

@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { Tag } from 'antd';
 import { Link, withRouter } from 'react-router-dom'
+import { connect } from 'react-redux';
+import { setTagsData } from '@store/tagsView/actions'
 
 const { CheckableTag } = Tag;
 // 从redux中获取数据
@@ -422,12 +424,13 @@ class HotTags extends Component {
     if ((nextState.tagsData.length === this.state.tagsData.length) && nextState.selectedTags[0] === this.state.selectedTags[0]) {
       return false
     }
+    // 只要不符合不重渲染条件的, 都重新保存一下tagsData
+    this.props.setTagsData(this.state.tagsData)
     return true
   }
-
-
-  // 
   componentWillMount() {
+    // 在创建之前, 获取tags列表, 观察刷新前是否已有tags
+    const TargsCurrent = this.props.TagsData.TagsData
     const arr = []
     MenuList.forEach(e => {
       this.getTarget(e, arr)
@@ -435,9 +438,30 @@ class HotTags extends Component {
     const {tagsData, selectedTags} = this.state
     const pathname = this.props.location.pathname
     const item = arr.filter(item => item.path === pathname)
+    // 在组件渲染完成前, 先判断, 是否是新增tags, 及存储内是否有tags
+    let TargeArr
+    if (item.length) {
+      // 如果是新增tags,并且存储内有, 则只需判断其中包不包含
+      if (TargsCurrent) {
+        const res = TargsCurrent.filter(e => e.path === item[0].path).length
+        // 如果包含, 则不添加
+        if (res) {
+          TargeArr = TargsCurrent
+        } else {
+          // 如果不包含, 则添加
+          TargeArr = [...TargsCurrent, ...item]
+        }
+      } else {
+        // 如果存储内没有, 则为当前标签
+        TargeArr = item
+      }
+    } else {
+      // 如果都没有, 则为默认标签
+      TargeArr = tagsData
+    }
     this.setState({
       tagsList: arr,
-      tagsData: item.length ? item : tagsData,
+      tagsData: TargeArr,
       selectedTags: item.length ? [item[0].path] : selectedTags
     })
   }
@@ -469,6 +493,8 @@ class HotTags extends Component {
     this.setState({
       tagsData: tags
     }, () => {
+      // 关闭的时候,重新保存一下tags
+      this.props.setTagsData(this.state.tagsData)
       if (this.state.tagsData.length === 0) {
         this.props.history.push('/Home')
       } else {
@@ -520,4 +546,8 @@ class HotTags extends Component {
     );
   }
 }
-export default withRouter(HotTags)
+export default connect (state => (
+  { TagsData: state.TagsData }
+), {
+  setTagsData
+})(withRouter(HotTags))
