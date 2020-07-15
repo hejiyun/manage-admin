@@ -18,7 +18,7 @@ const TagsData = (state=initState, action) => {
       }
     }
     case tag.SETROLELIST: {
-      state.MenuList = action.RoleList
+      state.RoleList = action.RoleList
       return {
         ...state
       }

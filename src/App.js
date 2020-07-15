@@ -14,7 +14,7 @@ class App extends Component {
         <Switch>
         <Route path='/Login' component={Login}></Route>
         <PrivateRoute path='/' component={Index}></PrivateRoute>
-         </Switch>
+        </Switch>
       </div>
     );
   }

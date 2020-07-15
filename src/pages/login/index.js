@@ -48,7 +48,7 @@ class login extends Component {
         const arr = []
         curMenuList.forEach(item => {
           if (item.type === 'MENU') {
-            arr.push(item)
+            arr.push(item.resourceCode)
           }
           if (item.childNodes) {
             this.getTarget(item, arr)
@@ -66,7 +66,7 @@ class login extends Component {
     if (item.childNodes) {
       item.childNodes.forEach(e => {
         if (e.type === 'MENU') {
-          arr.push(e)
+          arr.push(e.resourceCode)
         }
         if (e.childNodes) {
           this.getTarget(e, arr)

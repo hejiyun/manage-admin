@@ -2,6 +2,7 @@ import PrivateRoute from '@router/PrivateRoute'
 import React from 'react'
 import { withRouter, Switch, Redirect } from 'react-router-dom'
 import routers from '@router/index'
+import { connect } from 'react-redux';
 import loadable from '@util/loadable'
 const NotFound404 = loadable(() => import('@pages/404'))
 
@@ -19,8 +20,9 @@ class ContentMain extends React.Component {
              if(route.path === '/Login') {
               return null
              } else {
+               console.log(route)
               return route.path === '/NotFound' ? <PrivateRoute key={ index } component={NotFound404}></PrivateRoute> :
-              <PrivateRoute exact key={ index } path={route.path} component={route.component}/>
+              <PrivateRoute exact key={ index } roleList={this.props.RoleList} route={route} path={route.path} component={route.component}/>
                 
              }
             })
@@ -31,4 +33,6 @@ class ContentMain extends React.Component {
   }
 }
 
-export default withRouter(ContentMain)
+export default connect (state => (
+  { RoleList: state.TagsData.RoleList }
+))(withRouter(ContentMain)) 

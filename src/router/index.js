@@ -13,10 +13,20 @@ const routes = [
     },
     {
         path: '/home',
+        meta: {
+            title: 'B2B交易管理',
+            roles: ['B2B_Transaction'],
+            icon: 'form'
+        },
         component: Home
     },
     {
-        path: '/Collecte',
+        path: '/TradingPlatform/orderList',
+        meta: {
+            title: 'B2B交易管理',
+            roles: ['B2B_Transaction'],
+            icon: 'form'
+          },
         component: Collecte
     },
     {
@@ -35,8 +45,11 @@ const routes = [
 export const MenuList = [
   {
     path: '/Home',
-    redirect: '/TradingPlatform/orderList',
     name: '主页',
+    meta: {
+        title: '主页',
+        icon: 'form'
+      }
   },
   {
     path: '/TradingPlatform',
