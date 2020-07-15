@@ -52,6 +52,12 @@ class Index extends Component {
           visible: !this.state.visible
         });
       }
+      logOut = () => {
+        this.setState({
+          visible: !this.state.visible
+        });
+        sessionStorage.removeItem('persist:root')
+      }
       render() {
         let { loading } = this.state
         const content = (
@@ -62,7 +68,7 @@ class Index extends Component {
             </Link>
             </p>
            <p>
-           <Link to = '/login' onClick={this.handleVisibleChange}>
+           <Link to = '/login' onClick={this.logOut}>
               <span>退出登录</span>
             </Link>
            </p>

@@ -4,7 +4,7 @@ import {loginIn, getMenu} from '@axios/Test'
 import { setToken } from '@util/auth'
 import { connect } from 'react-redux';
 import { setAToken, setRToken, setUserName, setUserCode } from '@store/loginMsg/actions'
-import { setRoleList } from '@store/tagsView/actions'
+import { setRoleList, setTagsData } from '@store/tagsView/actions'
 
 const layout = {
     labelCol: { span: 8 },
@@ -20,6 +20,9 @@ const layout = {
 class login extends Component {
     formRef = React.createRef();
 
+    componentWillMount() {
+      this.props.setTagsData([])
+    }
     onReset = () => {  
       console.log(this.props)
         this.formRef.current.resetFields();
@@ -123,6 +126,6 @@ class login extends Component {
 export default connect (state => (
   { loginInsert: state.LoginInsert, TagsData: state.TagsData }
 ), {
-  setAToken, setRToken, setUserName, setUserCode, setRoleList
+  setAToken, setRToken, setUserName, setUserCode, setRoleList, setTagsData
 })(login)
 

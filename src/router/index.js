@@ -17,7 +17,7 @@ const routes = [
             title: 'B2B交易管理',
             roles: ['B2B_Transaction'],
             icon: 'form'
-        },
+          },
         component: Home
     },
     {
