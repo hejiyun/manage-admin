@@ -1,20 +1,24 @@
 import * as tag from './action-type'
 
 const initState = {
-  TagsData: [],
-  MenuList: []
+  TagsData: [{
+    path: '/Home',
+    redirect: '/TradingPlatform/orderList',
+    name: '主页',
+  }],
+  RoleList: []
 }
 
 const TagsData = (state=initState, action) => {
   switch (action.type) {
     case tag.SETTAGSDATA: {
-      state.TagsData = action.tagsData
+      state.TagsData = action.TagsData
       return {
         ...state
       }
     }
-    case tag.SETMENULIST: {
-      state.MenuList = action.MenuList
+    case tag.SETROLELIST: {
+      state.MenuList = action.RoleList
       return {
         ...state
       }

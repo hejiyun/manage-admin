@@ -5,7 +5,7 @@ import { getToken, setToken } from '@util/auth'
 // 创建axios对象
 const instance = axios.create({
   baseURL: process.env.BASE_API, // api 的 base_url
-  timeout: 5000 // request timeout
+  timeout: 50000 // request timeout
 })
 /* 添加一个计数器 */
 let needLoadingRequestCount = 0

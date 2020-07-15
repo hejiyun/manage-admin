@@ -1,2 +1,2 @@
 export const SETTAGSDATA = 'SetTagsData'
-export const SETMENULIST = 'SetMenuList'
+export const SETROLELIST = 'SetRoleList'

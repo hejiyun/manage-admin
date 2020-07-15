@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import { Form, Input, Button, Checkbox } from 'antd';
-import {loginIn} from '@axios/Test'
+import {loginIn, getMenu} from '@axios/Test'
 import { setToken } from '@util/auth'
 import { connect } from 'react-redux';
 import { setAToken, setRToken, setUserName, setUserCode } from '@store/loginMsg/actions'
+import { setRoleList } from '@store/tagsView/actions'
 
 const layout = {
     labelCol: { span: 8 },
@@ -33,7 +34,6 @@ class login extends Component {
       params['systemId'] = 10
       try {
         const res = await loginIn(values)
-        console.log(res)
         const Token = res.data.data.accessToken
         const RToken = res.data.data.refreshToken
         const userName = res.data.data.userName
@@ -43,12 +43,37 @@ class login extends Component {
         this.props.setRToken(RToken)
         this.props.setUserName(userName)
         this.props.setUserCode(userCode)
+        const resList = await getMenu()
+        const curMenuList = resList.data.data
+        const arr = []
+        curMenuList.forEach(item => {
+          if (item.type === 'MENU') {
+            arr.push(item)
+          }
+          if (item.childNodes) {
+            this.getTarget(item, arr)
+          }
+        })
+        this.props.setRoleList(arr)
         this.props.history.push('/Home')
       } catch(e) {
         console.log('登录失e败', e)
       } 
-   
   };
+  // 递归获取所有resourceCode
+  getTarget(item, arr) {
+    // 如果内部还有children,那么反复递归当前函数, arr为存储所有符合条件值的数组
+    if (item.childNodes) {
+      item.childNodes.forEach(e => {
+        if (e.type === 'MENU') {
+          arr.push(e)
+        }
+        if (e.childNodes) {
+          this.getTarget(e, arr)
+        }
+      })
+    }
+  }
     render () {
       console.log(this.props)
         return (
@@ -96,8 +121,8 @@ class login extends Component {
 }
 
 export default connect (state => (
-  { loginInsert: state.loginInsert }
+  { loginInsert: state.LoginInsert, TagsData: state.TagsData }
 ), {
-  setAToken, setRToken, setUserName, setUserCode
+  setAToken, setRToken, setUserName, setUserCode, setRoleList
 })(login)
 
