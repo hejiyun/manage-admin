@@ -74,6 +74,7 @@ class Index extends Component {
            </p>
           </div>
         );
+        // sider ---> breakpoint + collapsedwidth = 0  侧边栏自适应宽度隐藏
         return (
           <Spin spinning={loading} wrapperClassName="page-loading">
           <Layout className="layout-box-class">

@@ -136,6 +136,7 @@ class HotTags extends Component {
         Tindex = index
       }
     })
+    // 复合函数中的异步使用
     this.setState({
       tagsData: tags
     }, () => {
