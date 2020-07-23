@@ -152,6 +152,7 @@ class SiderMenu extends Component {
       {
        // 需要注意的是, 首先判断该项没有hidden属性, 然后再判断该项的roles属性在后端返回的权限路由当中,这样才能渲染出来
         MenuList.map((item, index) => {
+          // 判断item的hidden属性是不是true, 如果是则不渲染, 并且如果没有通过权限判断, 也不渲染
           if (!item.hidden && this.isShow(item, roleList)) {
               // 第一级菜单目录
               return  item.children && item.children.length ?  <SubMenu

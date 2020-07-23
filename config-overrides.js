@@ -22,7 +22,7 @@ module.exports = override(
     libraryDirectory: 'es',
     style: true,  
   }),
-  addDecoratorsLegacy(),
+  addDecoratorsLegacy(), // 支持装饰器
   addWebpackAlias({ //路径别名
     '@': path.resolve(__dirname, 'src'),
     '@components': path.resolve(__dirname, 'src/components'),
